@@ -11,13 +11,13 @@ Bu depo, Atıl Samancıoğlu'nun **Derin Öğrenme 2026** müfredatını takip e
 
 - [X] **Data Science Toolkit:** NumPy, Pandas, Seaborn & Matplotlib.
 - [X] **Advanced Python:** Decorators, Abstract Methods, Class Structures, Property Decorators (Data Validation).
-- [ ] **PyTorch Fundamentals:** Tensors, GPU (CUDA) kullanımı, Reshaping & Slicing teknikleri.
+- [X] **PyTorch Fundamentals:** Tensors, GPU (CUDA) kullanımı, Reshaping & Slicing teknikleri.
 
 ### 🧠 Aşama 2: Yapay Sinir Ağları (ANN) ve Derin Öğrenme Teorisi
 *Mimarinin kalbine iniş ve matematiği kodlama.*
 
-- [ ] **Teorik Temeller:** Gradient Descent, Backpropagation, Vanishing/Exploding Gradients.
-- [ ] **Optimizasyon & Regülarizasyon:** Adam, RMSProp, Dropout, Batch Norm, Weight Initialization.
+- [X] **Teorik Temeller:** Gradient Descent, Backpropagation, Vanishing/Exploding Gradients.
+- [X] **Optimizasyon & Regülarizasyon:** Adam, RMSProp, Dropout, Batch Norm, Weight Initialization.
 - [ ] **Model Mimarisi:** Manuel model oluşturma, Aktivasyon Fonksiyonları (ReLU, Softmax, GELU).
 - [ ] **Deployment:** Eğitilen modellerin Claude API desteğiyle Web App (Streamlit/Python) haline getirilmesi.
 
