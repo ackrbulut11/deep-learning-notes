@@ -1,6 +1,6 @@
 # 🗺️ Deep Learning Mastery: Comprehensive Roadmap
 
-Bu depo, Atıl Samancıoğlu'nun **Derin Öğrenme 2026** müfredatını takip ederek gerçekleştirdiğim kişisel öğrenme sürecimi kapsamaktadır. İçerik; kurs videoları boyunca kendi çıkardığım notlardan ve bölümler sonunda tamamladığım **kodlama ödevlerinden** oluşmaktadır.
+Bu depo, Atıl Samancıoğlu'nun **Derin Öğrenme 2026** müfredatını takip ederek gerçekleştirdiğim kişisel öğrenme sürecimi kapsamaktadır. İçerik; kurs videoları boyunca kendi çıkardığım notlardan ve bölümler sonunda tamamladığım kodlama ödevlerinden oluşmaktadır.
 
 ---
 
