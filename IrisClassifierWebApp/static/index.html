@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Iris çiçeği türünü tahmin eden PyTorch + FastAPI tabanlı sınıflandırıcı." />
+  <title>🌸 Iris Classifier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <main class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-icon">🌸</div>
+      <h1>Iris Classifier</h1>
+      <p class="subtitle">PyTorch Neural Network ile çiçek türü tahmini</p>
+      <div class="status-badge" id="statusBadge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Bağlanıyor…</span>
+      </div>
+    </header>
+
+    <!-- Input Card -->
+    <div class="card input-card">
+      <h2>Ölçümleri Girin</h2>
+
+      <div class="inputs-grid">
+        <!-- Sepal Length -->
+        <div class="input-group">
+          <label for="sepalLength">
+            <span class="label-icon">📏</span>
+            Sepal Uzunluğu (cm)
+          </label>
+          <div class="slider-row">
+            <input type="range" id="sepalLengthSlider" min="4.0" max="8.0" step="0.1" value="5.1" />
+            <input type="number" id="sepalLength" min="4.0" max="8.0" step="0.1" value="5.1" />
+          </div>
+        </div>
+
+        <!-- Sepal Width -->
+        <div class="input-group">
+          <label for="sepalWidth">
+            <span class="label-icon">📐</span>
+            Sepal Genişliği (cm)
+          </label>
+          <div class="slider-row">
+            <input type="range" id="sepalWidthSlider" min="2.0" max="4.5" step="0.1" value="3.5" />
+            <input type="number" id="sepalWidth" min="2.0" max="4.5" step="0.1" value="3.5" />
+          </div>
+        </div>
+
+        <!-- Petal Length -->
+        <div class="input-group">
+          <label for="petalLength">
+            <span class="label-icon">🌿</span>
+            Petal Uzunluğu (cm)
+          </label>
+          <div class="slider-row">
+            <input type="range" id="petalLengthSlider" min="1.0" max="7.0" step="0.1" value="1.4" />
+            <input type="number" id="petalLength" min="1.0" max="7.0" step="0.1" value="1.4" />
+          </div>
+        </div>
+
+        <!-- Petal Width -->
+        <div class="input-group">
+          <label for="petalWidth">
+            <span class="label-icon">🍃</span>
+            Petal Genişliği (cm)
+          </label>
+          <div class="slider-row">
+            <input type="range" id="petalWidthSlider" min="0.1" max="2.5" step="0.1" value="0.2" />
+            <input type="number" id="petalWidth" min="0.1" max="2.5" step="0.1" value="0.2" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Presets -->
+      <div class="presets">
+        <span class="presets-label">Örnek değerler:</span>
+        <button class="preset-btn" id="presetSetosa" data-sl="5.1" data-sw="3.5" data-pl="1.4" data-pw="0.2">Setosa</button>
+        <button class="preset-btn" id="presetVersicolor" data-sl="5.9" data-sw="3.0" data-pl="4.2" data-pw="1.5">Versicolor</button>
+        <button class="preset-btn" id="presetVirginica" data-sl="6.7" data-sw="3.0" data-pl="5.6" data-pw="2.4">Virginica</button>
+      </div>
+
+      <button class="predict-btn" id="predictBtn">
+        <span class="btn-text">Tahmin Et</span>
+        <span class="btn-spinner hidden" id="btnSpinner">⟳</span>
+      </button>
+    </div>
+
+    <!-- Result Card -->
+    <div class="card result-card hidden" id="resultCard">
+      <div class="result-header">
+        <div class="result-flower" id="resultFlower">🌸</div>
+        <div class="result-info">
+          <div class="result-label">Tahmin Edilen Tür</div>
+          <div class="result-species" id="resultSpecies">—</div>
+          <div class="confidence-row">
+            <span class="confidence-label">Güven Skoru</span>
+            <span class="confidence-value" id="confidenceValue">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="prob-section">
+        <h3>Olasılık Dağılımı</h3>
+        <div class="prob-bars" id="probBars"></div>
+      </div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-toast hidden" id="errorToast">
+      <span>⚠️</span> <span id="errorMsg">Bir hata oluştu.</span>
+    </div>
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
