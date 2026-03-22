@@ -2,7 +2,8 @@
    Constants
 ──────────────────────────────────────────── */
 const CLASS_FLOWERS = { Setosa: '🌼', Versicolor: '🌺', Virginica: '🌸' };
-const CLASS_KEYS = ['Setosa', 'Versicolor', 'Virginica'];
+const CLASS_KEYS    = ['Setosa', 'Versicolor', 'Virginica'];
+const CLASS_DISPLAY = { Setosa: 'Iris-setosa', Versicolor: 'Iris-versicolor', Virginica: 'Iris-virginica' };
 
 /* ────────────────────────────────────────────
    Element refs
@@ -30,25 +31,14 @@ syncPairs.forEach(([sliderId, numberId]) => {
   const slider = document.getElementById(sliderId);
   const number = document.getElementById(numberId);
 
-  const updateSliderGradient = (s) => {
-    const min = parseFloat(s.min);
-    const max = parseFloat(s.max);
-    const pct = ((parseFloat(s.value) - min) / (max - min)) * 100;
+  const updateGradient = (s) => {
+    const pct = ((parseFloat(s.value) - parseFloat(s.min)) / (parseFloat(s.max) - parseFloat(s.min))) * 100;
     s.style.background = `linear-gradient(to right, var(--accent) ${pct}%, var(--border) ${pct}%)`;
   };
 
-  slider.addEventListener('input', () => {
-    number.value = slider.value;
-    updateSliderGradient(slider);
-  });
-
-  number.addEventListener('input', () => {
-    slider.value = number.value;
-    updateSliderGradient(slider);
-  });
-
-  // Init gradient
-  updateSliderGradient(slider);
+  slider.addEventListener('input', () => { number.value = slider.value; updateGradient(slider); });
+  number.addEventListener('input', () => { slider.value = number.value; updateGradient(slider); });
+  updateGradient(slider); // init
 });
 
 /* ────────────────────────────────────────────
@@ -56,26 +46,21 @@ syncPairs.forEach(([sliderId, numberId]) => {
 ──────────────────────────────────────────── */
 document.querySelectorAll('.preset-btn').forEach(btn => {
   btn.addEventListener('click', () => {
-    setValues(
+    const vals = [
       parseFloat(btn.dataset.sl),
       parseFloat(btn.dataset.sw),
       parseFloat(btn.dataset.pl),
       parseFloat(btn.dataset.pw),
-    );
+    ];
+    syncPairs.forEach(([sliderId, numberId], i) => {
+      const slider = document.getElementById(sliderId);
+      const number = document.getElementById(numberId);
+      slider.value = vals[i];
+      number.value = vals[i];
+      slider.dispatchEvent(new Event('input'));
+    });
   });
 });
-
-function setValues(sl, sw, pl, pw) {
-  const vals = [sl, sw, pl, pw];
-  syncPairs.forEach(([sliderId, numberId], i) => {
-    const slider = document.getElementById(sliderId);
-    const number = document.getElementById(numberId);
-    slider.value = vals[i];
-    number.value = vals[i];
-    // Trigger gradient update
-    slider.dispatchEvent(new Event('input'));
-  });
-}
 
 /* ────────────────────────────────────────────
    Health check on load
@@ -96,7 +81,6 @@ async function checkHealth() {
     statusText.textContent = 'Sunucuya ulaşılamıyor';
   }
 }
-
 checkHealth();
 
 /* ────────────────────────────────────────────
@@ -110,9 +94,8 @@ async function predict() {
   const petal_length = parseFloat(document.getElementById('petalLength').value);
   const petal_width  = parseFloat(document.getElementById('petalWidth').value);
 
-  // Validate
   if ([sepal_length, sepal_width, petal_length, petal_width].some(isNaN)) {
-    showError('Lütfen tüm değerleri doğru girin.');
+    showError('Lutfen tum degerleri dogru girin.');
     return;
   }
 
@@ -129,11 +112,12 @@ async function predict() {
 
     if (!res.ok) {
       const err = await res.json();
-      throw new Error(err.detail || 'Sunucu hatası');
+      throw new Error(err.detail || 'Sunucu hatasi');
     }
 
     const data = await res.json();
     renderResult(data);
+
   } catch (err) {
     showError(err.message || 'Bilinmeyen hata');
   } finally {
@@ -145,25 +129,23 @@ async function predict() {
    Render result
 ──────────────────────────────────────────── */
 function renderResult(data) {
-  document.getElementById('resultFlower').textContent =
-    CLASS_FLOWERS[data.prediction] ?? '🌸';
-  document.getElementById('resultSpecies').textContent = data.prediction;
+  document.getElementById('resultFlower').textContent  = CLASS_FLOWERS[data.prediction] ?? '🌸';
+  document.getElementById('resultSpecies').textContent = CLASS_DISPLAY[data.prediction] ?? data.prediction;
   document.getElementById('confidenceValue').textContent = `${data.confidence}%`;
 
   const container = document.getElementById('probBars');
   container.innerHTML = '';
 
   CLASS_KEYS.forEach(cls => {
-    const pct  = data.probabilities[cls] ?? 0;
-    const key  = cls.toLowerCase();
+    const pct = data.probabilities[cls] ?? 0;
+    const key = cls.toLowerCase();
 
-    const row  = document.createElement('div');
+    const row = document.createElement('div');
     row.className = 'prob-row';
-
     row.innerHTML = `
       <div class="prob-meta">
-        <span class="prob-name">${CLASS_FLOWERS[cls]} ${cls}</span>
-        <span class="prob-value ${key}">${pct}%</span>
+        <span class="prob-name">${CLASS_FLOWERS[cls]} ${CLASS_DISPLAY[cls]}</span>
+        <span class="prob-pct ${key}">${pct}%</span>
       </div>
       <div class="prob-track">
         <div class="prob-fill ${key}" data-pct="${pct}"></div>
@@ -172,13 +154,15 @@ function renderResult(data) {
     container.appendChild(row);
   });
 
-  // Show card then animate bars (next frame ensures transition fires)
   resultCard.classList.remove('hidden');
+
+  // Animate bars + smooth scroll to result
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
       container.querySelectorAll('.prob-fill').forEach(fill => {
         fill.style.width = `${fill.dataset.pct}%`;
       });
+      resultCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 }
@@ -187,8 +171,8 @@ function renderResult(data) {
    UI helpers
 ──────────────────────────────────────────── */
 function setLoading(on) {
-  predictBtn.disabled = on;
-  btnText.textContent  = on ? 'Hesaplanıyor…' : 'Tahmin Et';
+  predictBtn.disabled      = on;
+  btnText.textContent      = on ? 'Hesaplaniyor...' : 'Tahmin Et';
   btnSpinner.classList.toggle('hidden', !on);
 }
 

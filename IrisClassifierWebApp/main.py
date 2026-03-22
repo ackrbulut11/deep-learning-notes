@@ -17,8 +17,11 @@ CLASS_NAMES = ["Setosa", "Versicolor", "Virginica"]
 # ──────────────────────────────────────────────
 # Load model at startup
 # ──────────────────────────────────────────────
+# Base directory = wherever uvicorn is launched from (IrisClassifierWebApp/)
+BASE_DIR = os.getcwd()
+
 MODEL_PATH = os.path.join(
-    os.path.dirname(__file__),
+    BASE_DIR,
     "..",
     "04-Pytorch",
     "models",
@@ -39,7 +42,7 @@ except Exception as e:
 # ──────────────────────────────────────────────
 # Static files
 # ──────────────────────────────────────────────
-STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
+STATIC_DIR = os.path.join(BASE_DIR, "static")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
@@ -105,4 +108,5 @@ async def predict(data: IrisInput):
 # ──────────────────────────────────────────────
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
+
