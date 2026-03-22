@@ -142,6 +142,12 @@ Web arayüzüne erişmek için tarayıcınızda şu adresi açın:
 http://localhost:8000
 ```
 
+![Uygulama Arayüzü](screenshots/app-tahmin-et.png)
+
+| Tahmin Formu | Tahmin Sonucu |
+|:---:|:---:|
+| ![Tahmin Et](screenshots/app-tahmin-et.png) | ![Tahmin Sonucu](screenshots/app-tahmin-gor.png) |
+
 **Arayüz özellikleri:**
 
 - ✨ Modern karanlık tema (glassmorphism)
