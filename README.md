@@ -19,7 +19,7 @@ Bu depo, Atıl Samancıoğlu'nun **Derin Öğrenme 2026** müfredatını takip e
 - [X] **Teorik Temeller:** Gradient Descent, Backpropagation, Vanishing/Exploding Gradients.
 - [X] **Optimizasyon & Regülarizasyon:** Adam, RMSProp, Dropout, Batch Norm, Weight Initialization.
 - [X] **Model Mimarisi:** Manuel model oluşturma, Aktivasyon Fonksiyonları (ReLU, Softmax, GELU).
-- [ ] **Deployment:** Eğitilen modellerin Claude API desteğiyle Web App (Streamlit/Python) haline getirilmesi.
+- [X] **Deployment:** Eğitilen modellerin Claude API desteğiyle Web App (FastAPI) haline getirilmesi.
 
 ### 👁️ Aşama 3: Bilgisayarlı Görü (CNN)
 *Görüntüleri anlamlandırma ve evrişimli ağlar.*
