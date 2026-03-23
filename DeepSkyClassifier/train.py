@@ -5,6 +5,7 @@ from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 from model import DeepSkyClassifier
 from pathlib import Path  # model kayıt için
+import joblib
 
 df = pd.read_csv("DeepSkyClassifier/data/stars.csv")
 df = df.rename(columns={
@@ -74,7 +75,11 @@ for epoch in range(epochs):
 MODEL_PATH = Path("DeepSkyClassifier/models")
 MODEL_PATH.mkdir(parents=True, exist_ok=True) 
 
-MODEL_NAME = "star_model.pth"  
-MODEL_SAVE_PATH = MODEL_PATH / MODEL_NAME   
+MODEL_NAME = "star_model.pth"
+MODEL_SAVE_PATH = MODEL_PATH / MODEL_NAME
+torch.save(obj=model.state_dict(), f=MODEL_SAVE_PATH)
 
-torch.save(obj = model.state_dict(), f = MODEL_SAVE_PATH)
+# 3. Preprocessing nesnelerini kaydet (Tercümanlar)
+joblib.dump(scaler, MODEL_PATH / "scaler.pkl")
+joblib.dump(le_color, MODEL_PATH / "le_color.pkl")
+joblib.dump(le_spectral, MODEL_PATH / "le_spectral.pkl")
