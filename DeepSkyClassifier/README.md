@@ -152,7 +152,7 @@ Web arayüzüne erişmek için tarayıcınızda şu adresi açın:
 http://127.0.0.1:8000
 ```
 
-![DeepSky Web App](screenshots/deepsky.png)
+![DeepSky Web App](screenshots/DeepSky.png)
 
 **Arayüz Detayları:**
 
