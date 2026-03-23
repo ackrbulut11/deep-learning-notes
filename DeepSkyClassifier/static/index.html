@@ -41,6 +41,8 @@
       <!-- Input fields -->
       <form id="starForm" autocomplete="off">
 
+        <div class="fields-group">
+
         <div class="field">
           <label class="field-label">🌡 TEMPERATURE <span class="unit">(K)</span></label>
           <input class="field-input" type="number" id="temperature" min="1000" max="100000" step="any" value="3068" required />
@@ -90,6 +92,9 @@
           </select>
         </div>
 
+        </div><!-- /fields-group -->
+
+        <div class="bottom-group">
         <hr class="sep" />
 
         <!-- Presets -->
@@ -107,6 +112,7 @@
           <span id="btnText">▶ RUN ANALYSIS</span>
           <span class="btn-spinner hidden" id="btnSpinner">◌</span>
         </button>
+        </div><!-- /bottom-group -->
 
       </form>
 
