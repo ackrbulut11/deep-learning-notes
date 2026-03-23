@@ -56,7 +56,7 @@ const PRESETS = {
   'preset-brown': { temperature: 3068,  luminosity: 0.0024,   radius: 0.17,   magnitude: 16.12,  color: 'Red',          spectralClass: 'M' },
   'preset-red':   { temperature: 3500,  luminosity: 0.0035,   radius: 0.3,    magnitude: 13.1,   color: 'Red',          spectralClass: 'M' },
   'preset-white': { temperature: 15000, luminosity: 0.00058,  radius: 0.0084, magnitude: 11.35,  color: 'White',        spectralClass: 'A' },
-  'preset-main':  { temperature: 5778,  luminosity: 1.0,      radius: 1.0,    magnitude: 4.83,   color: 'Yellow-white', spectralClass: 'G' },
+  'preset-main':  { temperature: 5778,  luminosity: 1.0,      radius: 1.0,    magnitude: 4.83,   color: 'yellow-white', spectralClass: 'G' },
   'preset-super': { temperature: 12000, luminosity: 10000,    radius: 100.0,  magnitude: -5.0,   color: 'Blue-white',   spectralClass: 'B' },
   'preset-hyper': { temperature: 30000, luminosity: 849420,   radius: 1600,   magnitude: -9.5,   color: 'Blue',         spectralClass: 'B' },
 };
