@@ -43,22 +43,22 @@
 
         <div class="field">
           <label class="field-label">🌡 TEMPERATURE <span class="unit">(K)</span></label>
-          <input class="field-input" type="number" id="temperature" min="1000" max="100000" step="100" value="3068" required />
+          <input class="field-input" type="number" id="temperature" min="1000" max="100000" step="any" value="3068" required />
         </div>
 
         <div class="field">
           <label class="field-label">💡 LUMINOSITY <span class="unit">(L/Lo)</span></label>
-          <input class="field-input" type="number" id="luminosity" min="0.0001" max="849420" step="0.0001" value="0.0024" required />
+          <input class="field-input" type="number" id="luminosity" min="0.0001" max="849420" step="any" value="0.0024" required />
         </div>
 
         <div class="field">
           <label class="field-label">🔭 RADIUS <span class="unit">(R/Ro)</span></label>
-          <input class="field-input" type="number" id="radius" min="0.001" max="2000" step="0.001" value="0.17" required />
+          <input class="field-input" type="number" id="radius" min="0.001" max="2000" step="any" value="0.17" required />
         </div>
 
         <div class="field">
           <label class="field-label">✦ ABSOLUTE MAGNITUDE</label>
-          <input class="field-input" type="number" id="magnitude" min="-15" max="25" step="0.01" value="16.12" required />
+          <input class="field-input" type="number" id="magnitude" min="-15" max="25" step="any" value="16.12" required />
         </div>
 
         <div class="field">
@@ -97,7 +97,9 @@
         <div class="presets">
           <button type="button" class="preset-btn" id="preset-brown">🟤 Brown Dwarf</button>
           <button type="button" class="preset-btn" id="preset-red">🔴 Red Dwarf</button>
+          <button type="button" class="preset-btn" id="preset-white">⚪ White Dwarf</button>
           <button type="button" class="preset-btn" id="preset-main">🌟 Main Sequence</button>
+          <button type="button" class="preset-btn" id="preset-super">🌠 Supergiant</button>
           <button type="button" class="preset-btn" id="preset-hyper">💥 Hypergiant</button>
         </div>
 

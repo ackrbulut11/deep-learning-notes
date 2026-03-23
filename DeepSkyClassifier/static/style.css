@@ -183,7 +183,7 @@ body {
   font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.12em;
   color: var(--muted); margin-bottom: 10px;
 }
-.presets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.presets { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
 .preset-btn {
   background: rgba(155, 93, 229, 0.08);
   border: 1px solid rgba(155, 93, 229, 0.3);
