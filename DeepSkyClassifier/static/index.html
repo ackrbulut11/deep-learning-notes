@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="DeepSkyClassifier – PyTorch + FastAPI tabanlı yıldız türü sınıflandırıcı." />
+  <title>🌌 DeepSky Classifier</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <main class="container">
+
+    <!-- ── Header ── -->
+    <header class="header">
+      <div class="header-icon">🌌</div>
+      <h1>DeepSky Classifier</h1>
+      <p class="subtitle">PyTorch Neural Network ile yıldız türü tahmini</p>
+      <div class="status-badge">
+        <span class="status-dot" id="statusDot"></span>
+        <span id="statusText">Bağlanıyor…</span>
+      </div>
+    </header>
+
+    <!-- ── Input Card ── -->
+    <div class="card input-card">
+      <h2>Yıldız Parametrelerini Girin</h2>
+
+      <div class="inputs-grid">
+
+        <!-- Temperature -->
+        <div class="input-group">
+          <label for="temperature"><span class="label-icon">🌡️</span> Sıcaklık (K)</label>
+          <input type="number" id="temperature" min="1000" max="100000" step="100" value="3068" />
+        </div>
+
+        <!-- Luminosity -->
+        <div class="input-group">
+          <label for="luminosity"><span class="label-icon">💡</span> Işıklılık (L/Lo)</label>
+          <input type="number" id="luminosity" min="0.0001" max="100000" step="0.001" value="0.0024" />
+        </div>
+
+        <!-- Radius -->
+        <div class="input-group">
+          <label for="radius"><span class="label-icon">🔭</span> Yarıçap (R/Ro)</label>
+          <input type="number" id="radius" min="0.001" max="2000" step="0.001" value="0.17" />
+        </div>
+
+        <!-- Magnitude -->
+        <div class="input-group">
+          <label for="magnitude"><span class="label-icon">✨</span> Mutlak Kadir</label>
+          <input type="number" id="magnitude" min="-15" max="25" step="0.01" value="16.12" />
+        </div>
+
+        <!-- Color -->
+        <div class="input-group">
+          <label for="color"><span class="label-icon">🎨</span> Renk</label>
+          <select id="color">
+            <option value="Red">Red</option>
+            <option value="Blue">Blue</option>
+            <option value="Blue-white">Blue-white</option>
+            <option value="White">White</option>
+            <option value="Yellowish White">Yellowish White</option>
+            <option value="Yellow-white">Yellow-white</option>
+            <option value="Pale yellow orange">Pale yellow orange</option>
+            <option value="Orange">Orange</option>
+            <option value="Orange-Red">Orange-Red</option>
+            <option value="Whitish">Whitish</option>
+          </select>
+        </div>
+
+        <!-- Spectral Class -->
+        <div class="input-group">
+          <label for="spectralClass"><span class="label-icon">🔬</span> Spektral Sınıf</label>
+          <select id="spectralClass">
+            <option value="M">M</option>
+            <option value="K">K</option>
+            <option value="G">G</option>
+            <option value="F">F</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="O">O</option>
+          </select>
+        </div>
+
+      </div>
+
+      <!-- Presets -->
+      <div class="presets">
+        <span class="presets-label">Örnek yıldızlar:</span>
+        <button class="preset-btn" id="preset-brown">🟤 Brown Dwarf</button>
+        <button class="preset-btn" id="preset-red">🔴 Red Dwarf</button>
+        <button class="preset-btn" id="preset-main">🌟 Main Sequence</button>
+        <button class="preset-btn" id="preset-hyper">💥 Hypergiant</button>
+      </div>
+
+      <button class="predict-btn" id="predictBtn">
+        <span id="btnText">Tahmin Et</span>
+        <span class="btn-spinner hidden" id="btnSpinner">⟳</span>
+      </button>
+    </div>
+
+    <!-- ── Result Card ── -->
+    <div class="card result-card hidden" id="resultCard">
+      <h2 class="result-title">Tahmin Sonucu</h2>
+      <div class="result-divider"></div>
+
+      <div class="result-box">
+        <div class="result-icon" id="resultIcon">⭐</div>
+        <div class="result-species" id="resultSpecies">—</div>
+        <div class="confidence-label">Güven Oranı:</div>
+        <div class="confidence-value" id="confidenceValue">—</div>
+      </div>
+
+      <h3 class="prob-title">Tüm Sınıf Olasılıkları</h3>
+      <div class="prob-bars" id="probBars"></div>
+    </div>
+
+    <!-- ── Error ── -->
+    <div class="error-toast hidden" id="errorToast">
+      <span>⚠️</span> <span id="errorMsg">Bir hata oluştu.</span>
+    </div>
+
+  </main>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
