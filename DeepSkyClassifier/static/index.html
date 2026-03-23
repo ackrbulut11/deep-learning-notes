@@ -1,69 +1,69 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="DeepSkyClassifier – Star type classification with PyTorch + FastAPI." />
-  <title>🌌 DeepSky Classifier</title>
+  <title>DeepSky Classifier</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
-  <div class="bg-orbs">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-  </div>
 
-  <main class="container">
+  <!-- Starfield canvas -->
+  <canvas id="starfield"></canvas>
 
-    <!-- ── Header ── -->
-    <header class="header">
-      <div class="header-icon">🌌</div>
-      <h1>DeepSky Classifier</h1>
-      <p class="subtitle">Star type prediction with PyTorch Neural Network</p>
-      <div class="status-badge">
-        <span class="status-dot" id="statusDot"></span>
-        <span id="statusText">Connecting…</span>
+  <!-- Scan line overlay -->
+  <div class="scanlines"></div>
+
+  <div class="app-shell">
+
+    <!-- ══ LEFT PANEL ══ -->
+    <aside class="panel panel-left">
+
+      <div class="brand">
+        <div class="brand-icon">◈</div>
+        <div>
+          <div class="brand-name">DEEPSKY</div>
+          <div class="brand-sub">STELLAR CLASSIFIER v1.0</div>
+        </div>
       </div>
-    </header>
 
-    <!-- ── Input Card ── -->
-    <div class="card input-card">
-      <h2>Enter Star Parameters</h2>
+      <div class="status-row">
+        <span class="dot" id="statusDot"></span>
+        <span class="mono" id="statusText">CONNECTING…</span>
+      </div>
 
-      <div class="inputs-grid">
+      <hr class="sep" />
 
-        <!-- Temperature -->
-        <div class="input-group">
-          <label for="temperature"><span class="label-icon">🌡️</span> Temperature (K)</label>
-          <input type="number" id="temperature" min="1000" max="100000" step="100" value="3068" />
+      <!-- Input fields -->
+      <form id="starForm" autocomplete="off">
+
+        <div class="field">
+          <label class="field-label">🌡 TEMPERATURE <span class="unit">(K)</span></label>
+          <input class="field-input" type="number" id="temperature" min="1000" max="100000" step="100" value="3068" required />
         </div>
 
-        <!-- Luminosity -->
-        <div class="input-group">
-          <label for="luminosity"><span class="label-icon">💡</span> Luminosity (L/Lo)</label>
-          <input type="number" id="luminosity" min="0.0001" max="100000" step="0.001" value="0.0024" />
+        <div class="field">
+          <label class="field-label">💡 LUMINOSITY <span class="unit">(L/Lo)</span></label>
+          <input class="field-input" type="number" id="luminosity" min="0.0001" max="849420" step="0.0001" value="0.0024" required />
         </div>
 
-        <!-- Radius -->
-        <div class="input-group">
-          <label for="radius"><span class="label-icon">🔭</span> Radius (R/Ro)</label>
-          <input type="number" id="radius" min="0.001" max="2000" step="0.001" value="0.17" />
+        <div class="field">
+          <label class="field-label">🔭 RADIUS <span class="unit">(R/Ro)</span></label>
+          <input class="field-input" type="number" id="radius" min="0.001" max="2000" step="0.001" value="0.17" required />
         </div>
 
-        <!-- Magnitude -->
-        <div class="input-group">
-          <label for="magnitude"><span class="label-icon">✨</span> Absolute Magnitude</label>
-          <input type="number" id="magnitude" min="-15" max="25" step="0.01" value="16.12" />
+        <div class="field">
+          <label class="field-label">✦ ABSOLUTE MAGNITUDE</label>
+          <input class="field-input" type="number" id="magnitude" min="-15" max="25" step="0.01" value="16.12" required />
         </div>
 
-        <!-- Color -->
-        <div class="input-group">
-          <label for="color"><span class="label-icon">🎨</span> Color</label>
-          <select id="color">
+        <div class="field">
+          <label class="field-label">◉ COLOR</label>
+          <select class="field-input" id="color">
             <option value="Red">Red</option>
             <option value="Blue">Blue</option>
             <option value="Blue-white">Blue-white</option>
@@ -77,59 +77,81 @@
           </select>
         </div>
 
-        <!-- Spectral Class -->
-        <div class="input-group">
-          <label for="spectralClass"><span class="label-icon">🔬</span> Spectral Class</label>
-          <select id="spectralClass">
-            <option value="M">M</option>
-            <option value="K">K</option>
-            <option value="G">G</option>
-            <option value="F">F</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="O">O</option>
+        <div class="field">
+          <label class="field-label">◈ SPECTRAL CLASS</label>
+          <select class="field-input" id="spectralClass">
+            <option value="M">M — Red (coolest)</option>
+            <option value="K">K — Orange</option>
+            <option value="G">G — Yellow</option>
+            <option value="F">F — Yellow-white</option>
+            <option value="A">A — White</option>
+            <option value="B">B — Blue-white</option>
+            <option value="O">O — Blue (hottest)</option>
           </select>
+        </div>
+
+        <hr class="sep" />
+
+        <!-- Presets -->
+        <div class="preset-label">QUICK LOAD</div>
+        <div class="presets">
+          <button type="button" class="preset-btn" id="preset-brown">🟤 Brown Dwarf</button>
+          <button type="button" class="preset-btn" id="preset-red">🔴 Red Dwarf</button>
+          <button type="button" class="preset-btn" id="preset-main">🌟 Main Sequence</button>
+          <button type="button" class="preset-btn" id="preset-hyper">💥 Hypergiant</button>
+        </div>
+
+        <button class="run-btn" type="submit" id="predictBtn">
+          <span id="btnText">▶ RUN ANALYSIS</span>
+          <span class="btn-spinner hidden" id="btnSpinner">◌</span>
+        </button>
+
+      </form>
+
+    </aside>
+
+    <!-- ══ RIGHT PANEL ══ -->
+    <main class="panel panel-right">
+
+      <!-- Idle state -->
+      <div class="idle-state" id="idleState">
+        <div class="idle-orb">
+          <div class="orb-ring ring-1"></div>
+          <div class="orb-ring ring-2"></div>
+          <div class="orb-ring ring-3"></div>
+          <div class="orb-core">◈</div>
+        </div>
+        <p class="idle-text">AWAITING STELLAR INPUT</p>
+        <p class="idle-sub">Configure parameters on the left and run analysis</p>
+      </div>
+
+      <!-- Result state -->
+      <div class="result-state hidden" id="resultState">
+
+        <div class="result-header">
+          <div class="result-icon" id="resultIcon">⭐</div>
+          <div class="result-info">
+            <div class="result-class" id="resultClass">—</div>
+            <div class="result-conf">CONFIDENCE: <span id="confidenceValue" class="conf-pct">—</span></div>
+          </div>
+        </div>
+
+        <div class="prob-section">
+          <div class="prob-heading">◈ CLASSIFICATION MATRIX</div>
+          <div id="probBars"></div>
         </div>
 
       </div>
 
-      <!-- Presets -->
-      <div class="presets">
-        <span class="presets-label">Sample stars:</span>
-        <button class="preset-btn" id="preset-brown">🟤 Brown Dwarf</button>
-        <button class="preset-btn" id="preset-red">🔴 Red Dwarf</button>
-        <button class="preset-btn" id="preset-main">🌟 Main Sequence</button>
-        <button class="preset-btn" id="preset-hyper">💥 Hypergiant</button>
+      <!-- Error -->
+      <div class="error-box hidden" id="errorToast">
+        <span class="error-icon">⚠</span>
+        <span id="errorMsg">An error occurred.</span>
       </div>
 
-      <button class="predict-btn" id="predictBtn">
-        <span id="btnText">Predict</span>
-        <span class="btn-spinner hidden" id="btnSpinner">⟳</span>
-      </button>
-    </div>
+    </main>
 
-    <!-- ── Result Card ── -->
-    <div class="card result-card hidden" id="resultCard">
-      <h2 class="result-title">Prediction Result</h2>
-      <div class="result-divider"></div>
-
-      <div class="result-box">
-        <div class="result-icon" id="resultIcon">⭐</div>
-        <div class="result-species" id="resultSpecies">—</div>
-        <div class="confidence-label">Confidence:</div>
-        <div class="confidence-value" id="confidenceValue">—</div>
-      </div>
-
-      <h3 class="prob-title">All Class Probabilities</h3>
-      <div class="prob-bars" id="probBars"></div>
-    </div>
-
-    <!-- ── Error ── -->
-    <div class="error-toast hidden" id="errorToast">
-      <span>⚠️</span> <span id="errorMsg">An error occurred.</span>
-    </div>
-
-  </main>
+  </div>
 
   <script src="/static/script.js"></script>
 </body>
