@@ -25,7 +25,7 @@ Bu depo, Atıl Samancıoğlu'nun **Derin Öğrenme 2026** müfredatını takip e
 *Görüntüleri anlamlandırma ve evrişimli ağlar.*
 
 - [X] **CNN Mimarisi:** Kernel, Stride, Padding, Max Pooling kavramlarının manuel implementasyonu.
-- [ ] **Modern CNN:** VGG mimarisini kopyalamak ve CIFAR10/Desert101 datasetleri ile eğitim.
+- [X] **Modern CNN:** VGG mimarisini kopyalamak ve CIFAR10/Desert101 datasetleri ile eğitim.
 - [ ] **Transfer Learning:** ResNet ve EfficientNet kullanarak köpek türü tanıyıcı geliştirme.
 - [ ] **Object Detection:** YOLO (You Only Look Once) testleri ve gerçek zamanlı tespitler.
 
