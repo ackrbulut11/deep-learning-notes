@@ -26,13 +26,13 @@ Bu depo, Atıl Samancıoğlu'nun **Derin Öğrenme 2026** müfredatını takip e
 
 - [X] **CNN Mimarisi:** Kernel, Stride, Padding, Max Pooling kavramlarının manuel implementasyonu.
 - [X] **Modern CNN:** VGG mimarisini kopyalamak ve CIFAR10/Desert101 datasetleri ile eğitim.
-- [ ] **Transfer Learning:** ResNet ve EfficientNet kullanarak köpek türü tanıyıcı geliştirme.
-- [ ] **Object Detection:** YOLO (You Only Look Once) testleri ve gerçek zamanlı tespitler.
+- [X] **Transfer Learning:** ResNet ve EfficientNet kullanarak köpek türü tanıyıcı geliştirme.
+- [X] **Object Detection:** YOLO (You Only Look Once) testleri ve gerçek zamanlı tespitler.
 
 ### 🤖 Aşama 4: Transformer ve Modern AI (LLM)
 *State-of-the-art mimarilerin (ViT & GPT) sıfırdan inşası.*
 
-- [ ] **Attention Mechanism:** Self-Attention, Multi-Head Attention ve Positional Encoding.
-- [ ] **Vision Transformer (ViT):** Patch embeddings, Class tokens ve ViT mimarisinin sıfırdan PyTorch ile yazılması.
+- [X] **Attention Mechanism:** Self-Attention, Multi-Head Attention ve Positional Encoding.
+- [X] **Vision Transformer (ViT):** Patch embeddings, Class tokens ve ViT mimarisinin sıfırdan PyTorch ile yazılması.
 - [ ] **Generative AI (GPT):** ShakespeareGPT projesi; Tokenizer yazımı, Decoder-only mimari tasarımı.
 - [ ] **LLM Training:** Temperature ayarları, Logit hesaplamaları ve Chatbot entegrasyonu.
