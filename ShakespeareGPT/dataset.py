@@ -4,14 +4,15 @@ import torch
 
 # URL for the Tiny Shakespeare dataset (forked from Andrej Karpathy)
 SHAKESPEARE_URL = "https://raw.githubusercontent.com/atilsamancioglu/ShakespeareInput/refs/heads/main/input.txt"
-DATA_PATH = "ShakespeareGPT/data/shakespeare.txt"
+current_dir = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(current_dir, "data", "shakespeare.txt")
 
 def download_data():
     if os.path.exists(DATA_PATH):
         print("Dataset already exists.")
         return
     
-    os.makedirs("data", exist_ok=True)
+    os.makedirs(os.path.dirname(DATA_PATH), exist_ok=True)
     urllib.request.urlretrieve(SHAKESPEARE_URL, DATA_PATH)
     print(f"Downloaded to {DATA_PATH}")
 
@@ -57,6 +58,7 @@ def load_data(train_split: float = 0.9):
         text = file.read()
 
     tokenizer = CharakterTokenizer(text)
+
     
     # örnek 
     """
@@ -79,5 +81,55 @@ def load_data(train_split: float = 0.9):
     return train_data, test_data, tokenizer
 
 
+"""
+-------------------------------------------------------------------------
+HOW LANGUAGE MODEL TRAINING WORKS
+-------------------------------------------------------------------------
+We create input-target pairs where TARGET = INPUT shifted by 1 position.
+The model learns to predict the NEXT character at each position.
+
+Example with block_size=5:
+
+    Text: "To be or not to be"
+
+    1. Pick random starting position, grab (block_size + 1) characters:
+        chunk = ['T', 'o', ' ', 'b', 'e', ' ']   (6 chars)
+
+    2. Split into input (x) and target (y):
+        x = ['T', 'o', ' ', 'b', 'e']     (first 5 chars)
+        y = ['o', ' ', 'b', 'e', ' ']     (last 5 chars = shifted by 1)
+
+    3. The model learns to predict:
+        Given 'T'       → predict 'o'
+        Given 'To'      → predict ' '
+        Given 'To '     → predict 'b'
+        Given 'To b'    → predict 'e'
+        Given 'To be'   → predict ' '
+
+This is done for multiple random positions (batch_size) at once.
+-------------------------------------------------------------------------
+"""
+def get_batch(data, block_size, batch_size):
+    MAX_START = len(data) - block_size - 1
+    positions = torch.randint(MAX_START, (batch_size,))
+
+    x = []
+    y = []
+
+    for pos in positions:
+        x.append(data[pos : pos + block_size])
+        y.append(data[pos + 1 : pos + block_size + 1])
+
+    x = torch.stack(x)
+    y = torch.stack(y)
+
+    return x, y
+
 if __name__ == "__main__":
     train_data, test_data, tokenizer = load_data()
+    x, y = get_batch(train_data, block_size=128, batch_size=3)
+
+
+    print(f"\nSample batch:")
+    print(f"  Input shape: {x.shape}")
+    print(f"  Target shape: {y.shape}")
