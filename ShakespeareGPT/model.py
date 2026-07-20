@@ -40,3 +40,83 @@ class TransformerBlock(nn.Module):
         x = x + self.mlp(self.ln2(x))
 
         return x
+
+
+class GPT(nn.Module):
+    def __init__(self,
+                 vocab_size, 
+                 embedding_dim = 384,
+                 num_heads = 6,
+                 num_layers = 6,
+                 dropout = 0.1,
+                 block_size = 256
+                 ):
+        self.token_embedding = nn.Embedding(num_embeddings=vocab_size,
+                                            embedding_dim=embedding_dim)
+        self.position_embedding = nn.Embedding(num_embeddings=block_size,
+                                            embedding_dim=embedding_dim)
+        
+        self.dropout = nn.Dropout(dropout)
+
+        self.blocks = nn.ModuleList(
+            [
+                TransformerBlock(
+                    embedding_dim=embedding_dim,
+                    num_heads=num_heads,
+                    dropout=dropout
+                )
+                for _ in range(num_layers)
+            ]
+        )
+
+        self.ln_final = nn.LayerNorm(embedding_dim)
+        self.output = nn.Linear(in_features=embedding_dim, out_features=vocab_size)
+        self.loss_fn = nn.CrossEntropyLoss()
+
+        causal_mask = torch.triu(
+            torch.ones(block_size, dtype=torch.bool),
+            diagonal = 1
+        )
+
+        self.register_buffer("causal_mask", causal_mask)
+
+        self.apply(self._init_weights)
+
+        total_params = sum(p.numel() for p in self.parameters())
+        print(f"Total parameters: {total_params}") 
+
+
+    def _init_weights(self, module):
+        if isinstance(module, nn.Linear):
+            torch.nn.init.normal_(module.weight, mean=0, std = 0.02)
+            if module.bias is not None:
+                torch.nn.init.zeros_(module.bias)
+        elif isinstance(module, nn.Embedding):
+            nn.init.normal_(module.weight, mean=0, std=0.02)
+
+
+    def forward(self, input_ids: torch.Tensor, targets:torch.Tensor = None) -> tuple:
+        batch_size, seq_len = input_ids.shape
+        device = input_ids.device        
+        
+        token_emb = self.token_embedding(input_ids)
+
+        positions = torch.arange(seq_len, device=device)
+        pos_emb = self.position_embedding(positions)
+        
+
+
+
+
+if __name__ == '__main__':
+    print(torch.triu(torch.ones(8,8,dtype=torch.bool), diagonal=1))
+
+
+
+
+
+
+
+
+
+
