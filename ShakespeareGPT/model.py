@@ -51,6 +51,9 @@ class GPT(nn.Module):
                  dropout = 0.1,
                  block_size = 256
                  ):
+
+        super().__init__()
+        self.block_size = block_size
         self.token_embedding = nn.Embedding(num_embeddings=vocab_size,
                                             embedding_dim=embedding_dim)
         self.position_embedding = nn.Embedding(num_embeddings=block_size,
@@ -74,7 +77,7 @@ class GPT(nn.Module):
         self.loss_fn = nn.CrossEntropyLoss()
 
         causal_mask = torch.triu(
-            torch.ones(block_size, dtype=torch.bool),
+            torch.ones((block_size, block_size), dtype=torch.bool),
             diagonal = 1
         )
 
@@ -104,15 +107,76 @@ class GPT(nn.Module):
         positions = torch.arange(seq_len, device=device)
         pos_emb = self.position_embedding(positions)
         
+        x = self.dropout(token_emb + pos_emb)
 
+        mask = self.causal_mask[:seq_len, :seq_len]
 
+        for block in self.blocks:
+            x = block(x, mask)
 
+        x = self.ln_final(x)
+        logits = self.output(x)
+        print(logits.shape)
 
+        loss=None
+        if targets is not None:
+            
+            # CrossEntropyLoss expects:
+            #   predictions: (N, num_classes)  → 2D
+            #   targets:     (N,)              → 1D
+            #
+            # But our shapes are:
+            #   logits:  (batch_size, seq_len, vocab_size) → 3D
+            #   targets: (batch_size, seq_len)             → 2D
+            #
+            # So we flatten batch & sequence into a single dimension:
+            #   logits:  (batch_size * seq_len, vocab_size)
+            #   targets: (batch_size * seq_len,)
+
+            batch_size, seq_len, vocab_size = logits.shape
+            logits_flat = logits.reshape(batch_size * seq_len, vocab_size)
+            targets_flat = targets.reshape(batch_size * seq_len)
+
+            loss = self.loss_fn(logits_flat, targets_flat)
+
+        return logits, loss
+
+    @torch.no_grad()
+    def generate(self, 
+                input_ids: torch.Tensor,
+                max_new_tokens:int, 
+                temperature: float = 1.0,  # 1 üstü uydurmaya girer, 0.2 çok güvenli, 0.7-1 arası yaratıcı               
+                ):
+        for _ in range(max_new_tokens):
+            if input_ids.size(1) <= self.block_size:
+                current_input = input_ids
+            else:
+                current_input = input_ids[:, -self.block_size:]
+            logits, _ = self.forward(current_input)
+
+            last_logits = logits[:, -1, :]
+            last_logits = last_logits / temperature
+
+            probs = F.softmax(last_logits, dim = 1)
+            next_token = torch.multinomial(probs, num_samples=1)
+
+            input_ids = torch.cat([ input_ids, next_token], dim = 1)
+
+        return input_ids
+
+                
 if __name__ == '__main__':
-    print(torch.triu(torch.ones(8,8,dtype=torch.bool), diagonal=1))
+    
+    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
-
-
+    gpt = GPT(vocab_size=65, embedding_dim=384)
+    batch_size = 4
+    seq_len = 256
+    dummy_input = torch.randint(0, 65, (batch_size, seq_len))
+    dummy_targets = torch.randint(0, 65, (batch_size, seq_len))
+    b, s = dummy_input.shape
+    gpt(dummy_input, dummy_targets)
+    gpt.generate(dummy_input, max_new_tokens=10, temperature=0.5)
 
 
 
